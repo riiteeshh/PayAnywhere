@@ -15,7 +15,6 @@ class _TransactionPageState extends State<TransactionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: Colors.red,
         title: Title(
             color: Colors.red,
@@ -23,7 +22,6 @@ class _TransactionPageState extends State<TransactionPage> {
               width: double.infinity,
               child: Text(
                 'Send Money',
-                textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Bowlby',
@@ -184,9 +182,9 @@ class _TransactionPageState extends State<TransactionPage> {
                     margin: EdgeInsets.only(top: 20, left: 10),
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: ElevatedButton(
-                      onPressed: clean,
+                      onPressed: cancel,
                       child: Text(
-                        'Clear',
+                        'Cancel',
                         style: TextStyle(fontSize: 22, color: Colors.red),
                       ),
                       style: TextButton.styleFrom(
@@ -227,8 +225,9 @@ class _TransactionPageState extends State<TransactionPage> {
 
   void send() {}
 
-  void clean() {
+  void cancel() {
     number.clear();
     amount.clear();
+    Navigator.pop(context);
   }
 }

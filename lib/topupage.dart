@@ -15,7 +15,6 @@ class _TopupPageState extends State<TopupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: Colors.red,
         title: Title(
             color: Colors.red,
@@ -23,7 +22,6 @@ class _TopupPageState extends State<TopupPage> {
               width: double.infinity,
               child: Text(
                 'Top-Up',
-                textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Bowlby',
@@ -184,9 +182,9 @@ class _TopupPageState extends State<TopupPage> {
                     margin: EdgeInsets.only(top: 20, left: 10),
                     width: MediaQuery.of(context).size.width * 0.4,
                     child: ElevatedButton(
-                      onPressed: clean,
+                      onPressed: cancel,
                       child: Text(
-                        'Clear',
+                        'Cancel',
                         style: TextStyle(fontSize: 22, color: Colors.red),
                       ),
                       style: TextButton.styleFrom(
@@ -225,9 +223,10 @@ class _TopupPageState extends State<TopupPage> {
     );
   }
 
-  void clean() {
+  void cancel() {
     mobnumber.clear();
     amount.clear();
+    Navigator.pop(context);
   }
 
   void send() {}
