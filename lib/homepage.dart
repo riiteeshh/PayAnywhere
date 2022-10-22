@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './qrpage.dart';
 import './topupage.dart';
 import './transactonpage.dart';
 
@@ -42,7 +43,10 @@ class _HomePageState extends State<HomePage> {
             enableFeedback: false,
             backgroundColor: Colors.red,
             splashColor: Colors.blue,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => QRTab()));
+            },
             child: Icon(
               Icons.qr_code_scanner_rounded,
               size: 40,
