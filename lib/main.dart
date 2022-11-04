@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:pay_anywhere/transactonpage.dart';
 import './loginpage.dart';
 
 void main() {
@@ -15,6 +16,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: SplashScreen(),
       debugShowCheckedModeBanner: false,
+      routes: {
+        '/login': (context) => LoginPage(),
+        '/scan': ((context) => TransactionPage())
+      },
     );
   }
 }
@@ -31,8 +36,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     Timer(Duration(seconds: 4), () {
       print('reached');
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => LoginPage()));
+      Navigator.pushReplacementNamed(context, '/login');
+      //can extract data in next page by
+      //final route= ModalRoute.of(context)?.settings.arguments as Map<String, String>;
     });
 
     return SafeArea(

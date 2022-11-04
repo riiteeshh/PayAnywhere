@@ -7,7 +7,7 @@ class QRYour extends StatefulWidget {
 }
 
 class _QRYourState extends State<QRYour> {
-  var yourqr = 'Yourid';
+  var yourqr = '9865762048';
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pay_anywhere/pin.dart';
 
 class TopupPage extends StatefulWidget {
   const TopupPage({super.key});
@@ -229,5 +230,7 @@ class _TopupPageState extends State<TopupPage> {
     Navigator.pop(context);
   }
 
-  void send() {}
+  void send() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MyPin()));
+  }
 }

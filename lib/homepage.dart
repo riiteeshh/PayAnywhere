@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pay_anywhere/yourqr.dart';
 import './qrpage.dart';
 import './topupage.dart';
 import './transactonpage.dart';
@@ -79,6 +80,22 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     Container(
+                      width: double.infinity,
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => QRYour()));
+                          },
+                          icon: Icon(
+                            Icons.qr_code_outlined,
+                            color: Colors.white,
+                            size: 30,
+                          )),
+                    ),
+                    Container(
                       margin: EdgeInsets.only(
                           top: 45, bottom: 20, left: 20, right: 20),
                       child: Text(
@@ -127,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           change
                               ? Text(
-                                  'XXXXX',
+                                  'XXXX.xx',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,

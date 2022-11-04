@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pay_anywhere/pin.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({super.key});
@@ -10,9 +11,18 @@ class TransactionPage extends StatefulWidget {
 class _TransactionPageState extends State<TransactionPage> {
   final number = TextEditingController();
   final amount = TextEditingController();
-  var bal = 10000;
+  var bal = 1000;
+
   @override
   Widget build(BuildContext context) {
+    final arg = (ModalRoute.of(context)?.settings.arguments ??
+        <dynamic, dynamic>{}) as Map;
+
+    if (arg['id'] != null) {
+      number.value = TextEditingValue(text: arg['id']);
+    }
+    //arg['id'] = null;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
@@ -223,7 +233,10 @@ class _TransactionPageState extends State<TransactionPage> {
     );
   }
 
-  void send() {}
+  void send() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => const MyPin()));
+  }
 
   void cancel() {
     number.clear();
