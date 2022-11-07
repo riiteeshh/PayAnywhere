@@ -231,6 +231,11 @@ class _TopupPageState extends State<TopupPage> {
   }
 
   void send() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MyPin()));
+    String top = 'topup';
+    Navigator.pushNamed(context, '/pinpage', arguments: {
+      'string': top,
+      'number': mobnumber.text,
+      'amt': amount.text
+    });
   }
 }

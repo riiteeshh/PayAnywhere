@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
 import 'package:pay_anywhere/homepage.dart';
 
@@ -11,8 +14,25 @@ class MyPin extends StatefulWidget {
 
 class _MyPinState extends State<MyPin> {
   late String pin;
+
   @override
   Widget build(BuildContext context) {
+    final arg = (ModalRoute.of(context)?.settings.arguments ??
+        <dynamic, dynamic>{}) as Map;
+    void sms() async {
+      if (pin.length == 4) {
+        String message = arg['string'] + ':' + arg['number'] + ':' + arg['amt'];
+        List<String> recipents = ["9865762048"];
+
+        String _result = await sendSMS(
+                message: message, recipients: recipents, sendDirect: true)
+            .catchError((onError) {
+          print(onError);
+        });
+        print(_result);
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -38,7 +58,9 @@ class _MyPinState extends State<MyPin> {
                   "●", // A String which you want to show when you use 'inputType: OtpPinFieldInputType.custom, '
               onSubmit: ((text) => pin = text),
               onChange: (text) {
-                pin = text;
+                setState(() {
+                  pin = text;
+                });
               },
 
               // to decorate your Otp_Pin_Field
@@ -71,11 +93,7 @@ class _MyPinState extends State<MyPin> {
             height: MediaQuery.of(context).size.height * 0.06,
             margin: EdgeInsets.only(top: 50),
             child: ElevatedButton(
-              onPressed: () {
-                if (pin.length == 4) {
-                  Navigator.pop(context);
-                }
-              },
+              onPressed: () => sms(),
               child: Text(
                 'DONE',
                 style: TextStyle(

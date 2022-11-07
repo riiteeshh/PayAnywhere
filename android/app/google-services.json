@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "603554859130",
+    "project_id": "payanywhere-693dc",
+    "storage_bucket": "payanywhere-693dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:603554859130:android:c07829fe63bf02e66e93c3",
+        "android_client_info": {
+          "package_name": "com.example.pay_anywhere"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "603554859130-tg4cg0pgj5rr8ljl3cnigs7qtmmser96.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKkXAQ6HlU_sCKz31yuWPSGrxPm84Gqp8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "603554859130-tg4cg0pgj5rr8ljl3cnigs7qtmmser96.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

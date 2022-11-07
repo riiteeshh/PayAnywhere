@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pay_anywhere/pin.dart';
+import 'package:flutter_sms/flutter_sms.dart';
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({super.key});
@@ -234,8 +235,9 @@ class _TransactionPageState extends State<TransactionPage> {
   }
 
   void send() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => const MyPin()));
+    String top = 'transaction';
+    Navigator.pushNamed(context, '/pinpage',
+        arguments: {'string': top, 'number': number.text, 'amt': amount.text});
   }
 
   void cancel() {
@@ -243,4 +245,6 @@ class _TransactionPageState extends State<TransactionPage> {
     amount.clear();
     Navigator.pop(context);
   }
+
+  void enc() {}
 }

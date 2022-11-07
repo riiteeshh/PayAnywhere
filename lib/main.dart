@@ -1,10 +1,13 @@
 import 'dart:async';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:pay_anywhere/pin.dart';
 import 'package:pay_anywhere/transactonpage.dart';
 import './loginpage.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -18,6 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/login': (context) => LoginPage(),
+        '/pinpage': (context) => MyPin(),
         '/scan': ((context) => TransactionPage())
       },
     );

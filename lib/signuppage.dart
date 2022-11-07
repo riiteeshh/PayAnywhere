@@ -1,4 +1,7 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 
 class SignUp extends StatefulWidget {
@@ -9,6 +12,9 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  final DatabaseReference dbref =
+      FirebaseDatabase.instance.ref().child('Users');
+
   @override
   void dispose() {
     name.dispose();
@@ -312,7 +318,14 @@ class _SignUpState extends State<SignUp> {
         _errornumber == null &&
         _errorpin == null &&
         _errorrepass == null) {
-      Navigator.pop(context);
+      Map<String, String> users = {
+        'name': name.text,
+        'address': address.text,
+        'mobilenumber': number.text,
+        'e-mailaddress': email.text,
+        'pin': password.text
+      };
+      dbref.push().set(users);
     } else {}
   }
 
