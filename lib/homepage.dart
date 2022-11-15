@@ -12,7 +12,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  bool change = false;
+  bool change = true;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -22,17 +22,32 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.red,
           title: Title(
               color: Colors.red,
-              child: Container(
-                width: double.infinity,
-                child: Text(
-                  'Welcome',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Bowlby',
-                      fontSize: 25,
-                      letterSpacing: 2),
-                ),
+              child: Stack(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Welcome',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'Bowlby',
+                          fontSize: 25,
+                          letterSpacing: 2),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/login');
+                        },
+                        icon: Icon(
+                          Icons.logout_rounded,
+                          size: 30,
+                        )),
+                  ),
+                ],
               )),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

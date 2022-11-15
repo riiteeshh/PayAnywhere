@@ -41,8 +41,8 @@ dependencies:
   multi_value_listenable_builder: ^0.0.2
   otp_pin_field: ^1.0.2
   flutter_sms: ^2.3.3
-  firebase_database: ^10.0.4
   firebase_core: ^2.1.1
+  cloud_firestore: ^4.0.5
 
 dev_dependencies:
   flutter_test:

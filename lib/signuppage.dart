@@ -1,7 +1,5 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 
 class SignUp extends StatefulWidget {
@@ -12,9 +10,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  final DatabaseReference dbref =
-      FirebaseDatabase.instance.ref().child('Users');
-
   @override
   void dispose() {
     name.dispose();
@@ -32,6 +27,10 @@ class _SignUpState extends State<SignUp> {
   final email = TextEditingController();
   final password = TextEditingController();
   final repass = TextEditingController();
+  var dbref = FirebaseFirestore.instance.collection('UserData');
+  var dbid = FirebaseFirestore.instance.collection('UserData').doc();
+  var balance = '1000';
+  bool wait = false;
 
   @override
   Widget build(BuildContext context) {
@@ -289,13 +288,18 @@ class _SignUpState extends State<SignUp> {
                     height: MediaQuery.of(context).size.height * 0.075,
                     child: ElevatedButton(
                       onPressed: sign,
-                      child: Text(
-                        'SIGN UP',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontFamily: 'DelaGothic'),
-                      ),
+                      child: wait
+                          ? Center(
+                              child: CircularProgressIndicator(
+                              color: Colors.red,
+                            ))
+                          : Text(
+                              'SIGN UP',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  fontFamily: 'DelaGothic'),
+                            ),
                       style: ElevatedButton.styleFrom(
                           enableFeedback: false,
                           elevation: 20,
@@ -311,7 +315,10 @@ class _SignUpState extends State<SignUp> {
         });
   }
 
-  void sign() {
+  Future<void> sign() async {
+    setState(() {
+      wait = !wait;
+    });
     if (_erroraddress == null &&
         _errormail == null &&
         _errorname == null &&
@@ -319,13 +326,20 @@ class _SignUpState extends State<SignUp> {
         _errorpin == null &&
         _errorrepass == null) {
       Map<String, String> users = {
+        'id': dbid.id,
+        'trno': DateTime.now().millisecondsSinceEpoch.toString(),
+        'balance': balance,
         'name': name.text,
         'address': address.text,
         'mobilenumber': number.text,
         'e-mailaddress': email.text,
         'pin': password.text
       };
-      dbref.push().set(users);
+      await dbref.add(users);
+      setState(() {
+        wait = !wait;
+      });
+      Navigator.pop(context);
     } else {}
   }
 

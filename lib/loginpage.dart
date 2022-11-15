@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import './signuppage.dart';
 import './homepage.dart';
@@ -22,6 +23,8 @@ class _LoginPageState extends State<LoginPage> {
   var number = TextEditingController();
   var password = TextEditingController();
   bool showpass = false;
+  bool wait = false;
+  var dbref = FirebaseFirestore.instance.collection('UserData');
   @override
   Widget build(BuildContext context) {
     return MultiValueListenableBuilder(
@@ -33,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
               body: Column(
                 children: <Widget>[
                   Expanded(
-                    flex: 1,
+                    flex: 0,
                     child: Container(
                       color: Colors.white,
                       child: Column(
@@ -55,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Expanded(
-                    flex: 2,
+                    flex: 3,
                     child: Container(
                       color: Colors.red.withOpacity(0.9),
                       width: double.infinity,
@@ -77,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(top: 25),
+                            margin: EdgeInsets.only(top: 0),
                             padding: EdgeInsets.all(10),
                             child: TextFormField(
                               textInputAction: TextInputAction.next,
@@ -118,7 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(top: 20),
+                            margin: EdgeInsets.only(top: 5),
                             padding: EdgeInsets.all(10),
                             child: TextField(
                               obscureText: showpass ? false : true,
@@ -133,9 +136,15 @@ class _LoginPageState extends State<LoginPage> {
                                         BorderSide(color: Colors.yellow)),
                                 errorStyle: TextStyle(color: Colors.yellow),
                                 labelText: 'Password',
-                                suffixIcon: showpass
-                                    ? Icon(Icons.visibility_off)
-                                    : Icon(Icons.remove_red_eye),
+                                suffixIcon: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        showpass = !showpass;
+                                      });
+                                    },
+                                    icon: showpass
+                                        ? Icon(Icons.visibility_off_rounded)
+                                        : Icon(Icons.remove_red_eye)),
                                 floatingLabelStyle: TextStyle(
                                     color: Colors.amber,
                                     fontSize: 25,
@@ -160,33 +169,6 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(left: 5),
-                            child: Row(
-                              children: [
-                                Checkbox(
-                                  splashRadius: 30,
-                                  side: BorderSide(width: 2),
-                                  activeColor: Colors.amber,
-                                  value: showpass,
-                                  onChanged: (newval) {
-                                    setState(() {
-                                      showpass = newval!;
-                                    });
-                                  },
-                                ),
-                                Text(
-                                  'Show Password',
-                                  style: TextStyle(
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.bold,
-                                      color: showpass
-                                          ? Colors.amber
-                                          : Colors.black),
-                                ),
-                              ],
                             ),
                           ),
                           Row(
@@ -216,13 +198,18 @@ class _LoginPageState extends State<LoginPage> {
                                     MediaQuery.of(context).size.height * 0.075,
                                 child: ElevatedButton(
                                   onPressed: logg,
-                                  child: Text(
-                                    'LOG IN',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20,
-                                        fontFamily: 'DelaGothic'),
-                                  ),
+                                  child: wait
+                                      ? Center(
+                                          child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ))
+                                      : Text(
+                                          'LOG IN',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontFamily: 'DelaGothic'),
+                                        ),
                                   style: ElevatedButton.styleFrom(
                                       enableFeedback: false,
                                       elevation: 20,
@@ -271,10 +258,45 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  void logg() {
+  Future<void> logg() async {
     if (_errornumber == null && _errorpass == null) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => const HomePage()));
+      var pin;
+      setState(() {
+        wait = !wait;
+      });
+
+      await dbref
+          .where('mobilenumber', isEqualTo: number.text)
+          .get()
+          .then((QuerySnapshot querySnapshot) {
+        querySnapshot.docs.forEach((element) {
+          print(element['name']);
+          pin = element['pin'];
+        });
+      });
+      if (pin == password.text) {
+        setState(() {
+          wait = !wait;
+          print(pin);
+        });
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
+      } else if (pin != password.text) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          behavior: SnackBarBehavior.floating,
+          elevation: 20,
+          content: Text(
+            'Enter valid Password',
+            style: TextStyle(color: Colors.red),
+          ),
+          backgroundColor: Colors.white,
+        ));
+        setState(() {
+          wait = !wait;
+          print(pin);
+        });
+      }
     }
   }
 }
