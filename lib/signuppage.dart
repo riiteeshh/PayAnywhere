@@ -29,7 +29,7 @@ class _SignUpState extends State<SignUp> {
   final repass = TextEditingController();
   var dbref = FirebaseFirestore.instance.collection('UserData');
   var dbid = FirebaseFirestore.instance.collection('UserData').doc();
-  var balance = '1000';
+  num balance = 1000;
   bool wait = false;
 
   @override
@@ -325,9 +325,7 @@ class _SignUpState extends State<SignUp> {
         _errornumber == null &&
         _errorpin == null &&
         _errorrepass == null) {
-      Map<String, String> users = {
-        'id': dbid.id,
-        'trno': DateTime.now().millisecondsSinceEpoch.toString(),
+      Map<String, dynamic> users = {
         'balance': balance,
         'name': name.text,
         'address': address.text,

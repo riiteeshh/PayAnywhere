@@ -261,6 +261,9 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> logg() async {
     if (_errornumber == null && _errorpass == null) {
       var pin;
+
+      var name;
+
       setState(() {
         wait = !wait;
       });
@@ -270,8 +273,10 @@ class _LoginPageState extends State<LoginPage> {
           .get()
           .then((QuerySnapshot querySnapshot) {
         querySnapshot.docs.forEach((element) {
-          print(element['name']);
+          name = element['name'];
           pin = element['pin'];
+
+          print(number);
         });
       });
       if (pin == password.text) {
@@ -279,15 +284,17 @@ class _LoginPageState extends State<LoginPage> {
           wait = !wait;
           print(pin);
         });
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => const HomePage()));
+        Navigator.pushReplacementNamed(context, '/homepage', arguments: {
+          'name': name,
+          'number': number.text,
+        });
       } else if (pin != password.text) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           behavior: SnackBarBehavior.floating,
           elevation: 20,
           content: Text(
-            'Enter valid Password',
+            'Enter valid Username & Password',
             style: TextStyle(color: Colors.red),
           ),
           backgroundColor: Colors.white,

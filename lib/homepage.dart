@@ -15,6 +15,8 @@ class _HomePageState extends State<HomePage> {
   bool change = true;
   @override
   Widget build(BuildContext context) {
+    final arg = (ModalRoute.of(context)?.settings.arguments ??
+        <dynamic, dynamic>{}) as Map;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -99,10 +101,10 @@ class _HomePageState extends State<HomePage> {
                       alignment: Alignment.topRight,
                       child: IconButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => QRYour()));
+                            Navigator.pushNamed(context, '/yourqr', arguments: {
+                              'number': arg['number'],
+                              'name': arg['name'],
+                            });
                           },
                           icon: Icon(
                             Icons.qr_code_outlined,
@@ -114,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                       margin: EdgeInsets.only(
                           top: 45, bottom: 20, left: 20, right: 20),
                       child: Text(
-                        'Ritesh Pandey',
+                        arg['name'],
                         style: TextStyle(
                             color: Colors.white,
                             fontFamily: 'FuzzybubblesBold',

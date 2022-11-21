@@ -1,13 +1,15 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:pay_anywhere/homepage.dart';
 import 'package:pay_anywhere/pin.dart';
 import 'package:pay_anywhere/transactonpage.dart';
+import 'package:pay_anywhere/yourqr.dart';
 import './loginpage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  Firebase.initializeApp();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -21,7 +23,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         '/login': (context) => LoginPage(),
+        '/homepage': (context) => HomePage(),
         '/pinpage': (context) => MyPin(),
+        '/yourqr': (context) => QRYour(),
         '/scan': ((context) => TransactionPage())
       },
     );

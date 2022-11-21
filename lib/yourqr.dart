@@ -7,10 +7,10 @@ class QRYour extends StatefulWidget {
 }
 
 class _QRYourState extends State<QRYour> {
-  var yourqr = '9865762048';
-
   @override
   Widget build(BuildContext context) {
+    final arg = (ModalRoute.of(context)?.settings.arguments ??
+        <dynamic, dynamic>{}) as Map;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.red,
@@ -32,7 +32,7 @@ class _QRYourState extends State<QRYour> {
             child: Padding(
               padding: const EdgeInsets.all(60.0),
               child: QrImage(
-                data: yourqr,
+                data: arg['number'],
                 version: QrVersions.auto,
               ),
             ),
@@ -40,7 +40,7 @@ class _QRYourState extends State<QRYour> {
           Container(
             alignment: Alignment.center,
             child: Text(
-              'Ritesh Pandey',
+              arg['name'],
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 25,
