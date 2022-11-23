@@ -3,13 +3,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:pay_anywhere/homepage.dart';
 import 'package:pay_anywhere/pin.dart';
+import 'package:pay_anywhere/topupage.dart';
 import 'package:pay_anywhere/transactonpage.dart';
 import 'package:pay_anywhere/yourqr.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import './loginpage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  SharedPreferences.setMockInitialValues({});
   runApp(MyApp());
 }
 
@@ -25,6 +28,8 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(),
         '/homepage': (context) => HomePage(),
         '/pinpage': (context) => MyPin(),
+        '/transactionpage': (context) => TransactionPage(),
+        '/topuppage': (context) => TopupPage(),
         '/yourqr': (context) => QRYour(),
         '/scan': ((context) => TransactionPage())
       },
@@ -73,6 +78,15 @@ class _SplashScreenState extends State<SplashScreen> {
                     color: Colors.red,
                     fontSize: MediaQuery.of(context).size.aspectRatio * 120,
                     fontWeight: FontWeight.bold),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 55),
+              width: double.infinity,
+              alignment: Alignment.bottomCenter,
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.white,
+                color: Colors.red,
               ),
             )
           ],

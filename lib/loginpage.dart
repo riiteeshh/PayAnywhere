@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
+import './sharedprefs.dart';
 import './signuppage.dart';
-import './homepage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   bool showpass = false;
   bool wait = false;
   var dbref = FirebaseFirestore.instance.collection('UserData');
+
   @override
   Widget build(BuildContext context) {
     return MultiValueListenableBuilder(
@@ -275,19 +276,16 @@ class _LoginPageState extends State<LoginPage> {
         querySnapshot.docs.forEach((element) {
           name = element['name'];
           pin = element['pin'];
-
-          print(number);
         });
       });
       if (pin == password.text) {
+        await sharedpref.savedata('username', name);
+        await sharedpref.savedata('pindata', pin);
+        await sharedpref.savedata('contactnumber', number.text);
         setState(() {
           wait = !wait;
-          print(pin);
         });
-        Navigator.pushReplacementNamed(context, '/homepage', arguments: {
-          'name': name,
-          'number': number.text,
-        });
+        Navigator.pushReplacementNamed(context, '/homepage');
       } else if (pin != password.text) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
