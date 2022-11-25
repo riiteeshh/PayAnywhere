@@ -8,11 +8,11 @@ import 'package:pay_anywhere/transactonpage.dart';
 import 'package:pay_anywhere/yourqr.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import './loginpage.dart';
+import './sharedprefs.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  SharedPreferences.setMockInitialValues({});
   runApp(MyApp());
 }
 
@@ -47,11 +47,13 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    Timer(Duration(seconds: 4), () {
-      print('reached');
-      Navigator.pushReplacementNamed(context, '/login');
-      //can extract data in next page by
-      //final route= ModalRoute.of(context)?.settings.arguments as Map<String, String>;
+    Timer(Duration(seconds: 2), () async {
+      var check = await sharedpref.getdata('login');
+      if (check == null || check == 'false') {
+        Navigator.pushReplacementNamed(context, '/login');
+      } else if (check == 'true') {
+        Navigator.pushReplacementNamed(context, '/homepage');
+      }
     });
 
     return SafeArea(

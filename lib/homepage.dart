@@ -49,6 +49,7 @@ class _HomePageState extends State<HomePage> {
                     child: IconButton(
                         onPressed: () {
                           sharedpref.cleardata();
+                          sharedpref.savedata('login', 'false');
                           Navigator.pushReplacementNamed(context, '/login');
                         },
                         icon: Icon(

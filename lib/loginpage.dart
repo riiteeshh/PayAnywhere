@@ -282,6 +282,7 @@ class _LoginPageState extends State<LoginPage> {
         await sharedpref.savedata('username', name);
         await sharedpref.savedata('pindata', pin);
         await sharedpref.savedata('contactnumber', number.text);
+        await sharedpref.savedata('login', 'true');
         setState(() {
           wait = !wait;
         });
