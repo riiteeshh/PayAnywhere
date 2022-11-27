@@ -270,7 +270,7 @@ class _LoginPageState extends State<LoginPage> {
       });
 
       await dbref
-          .where('mobilenumber', isEqualTo: number.text)
+          .where('mobilenumber', isEqualTo: '+977' + number.text)
           .get()
           .then((QuerySnapshot querySnapshot) {
         querySnapshot.docs.forEach((element) {

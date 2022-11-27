@@ -327,9 +327,9 @@ class _SignUpState extends State<SignUp> {
         _errorrepass == null) {
       Map<String, dynamic> users = {
         'balance': balance,
-        'name': name.text,
-        'address': address.text,
-        'mobilenumber': number.text,
+        'name': name.text.toUpperCase(),
+        'address': address.text.toUpperCase(),
+        'mobilenumber': '+977' + number.text,
         'e-mailaddress': email.text,
         'pin': password.text
       };

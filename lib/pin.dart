@@ -15,7 +15,7 @@ class MyPin extends StatefulWidget {
 class _MyPinState extends State<MyPin> {
   late String pin;
   late String userpin;
-  var recpt = '9865762048';
+  var recpt = '9865762048'; // server number
   Future<bool> gettingpindata() async {
     userpin = await sharedpref.getdata('pindata');
     return true;
@@ -27,7 +27,8 @@ class _MyPinState extends State<MyPin> {
         <dynamic, dynamic>{}) as Map;
     void sms() async {
       if (pin == userpin) {
-        String message = arg['string'] + ':' + arg['number'] + ':' + arg['amt'];
+        String message =
+            arg['string'] + ':' + '+977' + arg['number'] + ':' + arg['amt'];
         List<String> recipents = [recpt];
         String _result = await sendSMS(
                 message: message, recipients: recipents, sendDirect: true)
