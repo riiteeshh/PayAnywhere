@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
-import 'package:pay_anywhere/homepage.dart';
 import 'package:pay_anywhere/sharedprefs.dart';
 
 class MyPin extends StatefulWidget {
@@ -15,7 +14,7 @@ class MyPin extends StatefulWidget {
 
 class _MyPinState extends State<MyPin> {
   late String pin;
-  String? userpin;
+  late String userpin;
   var recpt = '9865762048';
   Future<bool> gettingpindata() async {
     userpin = await sharedpref.getdata('pindata');
@@ -27,7 +26,7 @@ class _MyPinState extends State<MyPin> {
     final arg = (ModalRoute.of(context)?.settings.arguments ??
         <dynamic, dynamic>{}) as Map;
     void sms() async {
-      if (pin.length == 4 && pin == userpin) {
+      if (pin == userpin) {
         String message = arg['string'] + ':' + arg['number'] + ':' + arg['amt'];
         List<String> recipents = [recpt];
         String _result = await sendSMS(

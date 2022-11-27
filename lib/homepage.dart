@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pay_anywhere/yourqr.dart';
+import 'package:permission_handler/permission_handler.dart';
 import './qrpage.dart';
 import './sharedprefs.dart';
-import './topupage.dart';
-import './transactonpage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,6 +14,11 @@ class _HomePageState extends State<HomePage> {
   bool change = true;
   String? username, contactnumber;
   Future<bool> gettingdata() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.sms,
+      Permission.camera,
+      //add more permission to request here.
+    ].request();
     username = await sharedpref.getdata('username');
     contactnumber = await sharedpref.getdata('contactnumber');
     return true;
