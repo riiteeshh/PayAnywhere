@@ -45,6 +45,7 @@ dependencies:
   cloud_firestore: ^4.0.5
   shared_preferences: ^2.0.15
   permission_handler: ^10.2.0
+  aes_crypt_null_safe: ^2.0.2
 
 dev_dependencies:
   flutter_test:

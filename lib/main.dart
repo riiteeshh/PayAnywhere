@@ -6,7 +6,6 @@ import 'package:pay_anywhere/pin.dart';
 import 'package:pay_anywhere/topupage.dart';
 import 'package:pay_anywhere/transactonpage.dart';
 import 'package:pay_anywhere/yourqr.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import './loginpage.dart';
 import './sharedprefs.dart';
 

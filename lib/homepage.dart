@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import './qrpage.dart';
 import './sharedprefs.dart';
 
@@ -12,7 +13,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool change = true;
-  String? username, contactnumber;
+  String? username, contactnumber, symbol;
+  num? balance;
+  var dbref = FirebaseFirestore.instance.collection('UserData');
   Future<bool> gettingdata() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.sms,
@@ -21,7 +24,25 @@ class _HomePageState extends State<HomePage> {
     ].request();
     username = await sharedpref.getdata('username');
     contactnumber = await sharedpref.getdata('contactnumber');
+
     return true;
+  }
+
+  void show() async {
+    print('reach');
+    var id = await sharedpref.getdata('id');
+    symbol = id;
+    print(id);
+    await dbref.doc(id).get().then((data) {
+      if (data.exists) {
+        print('reach');
+        balance = data['balance'];
+        print(balance);
+      }
+    });
+    setState(() {
+      change = !change;
+    });
   }
 
   @override
@@ -136,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                             margin: EdgeInsets.only(
                                 top: 45, bottom: 20, left: 20, right: 20),
                             child: Text(
-                              username!,
+                              username!.toUpperCase(),
                               style: TextStyle(
                                   color: Colors.white,
                                   fontFamily: 'FuzzybubblesBold',
@@ -156,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                                         fontSize: 19),
                                   )
                                 : Text(
-                                    '020479879456514151',
+                                    '$symbol',
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold,
@@ -188,27 +209,32 @@ class _HomePageState extends State<HomePage> {
                                             fontSize: 22),
                                       )
                                     : Text(
-                                        '10000',
+                                        '$balance',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 22),
                                       ),
                                 IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        change = !change;
-                                      });
-                                    },
-                                    icon: change
-                                        ? Icon(
-                                            Icons.remove_red_eye,
-                                            color: Colors.white,
-                                          )
-                                        : Icon(
-                                            Icons.visibility_off,
-                                            color: Colors.white,
-                                          )),
+                                  onPressed: () {
+                                    show();
+                                  },
+                                  // {
+                                  //   setState(() {
+                                  //     change = !change;
+                                  //   });
+                                  // }
+
+                                  icon: change
+                                      ? Icon(
+                                          Icons.remove_red_eye,
+                                          color: Colors.white,
+                                        )
+                                      : Icon(
+                                          Icons.visibility_off,
+                                          color: Colors.white,
+                                        ),
+                                ),
                               ],
                             ),
                           ),

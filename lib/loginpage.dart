@@ -262,7 +262,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> logg() async {
     if (_errornumber == null && _errorpass == null) {
       var pin;
-
+      var ids;
       var name;
 
       setState(() {
@@ -274,13 +274,18 @@ class _LoginPageState extends State<LoginPage> {
           .get()
           .then((QuerySnapshot querySnapshot) {
         querySnapshot.docs.forEach((element) {
+          print(SnapshotMetadata);
           name = element['name'];
           pin = element['pin'];
+          ids = element.id;
+          print(pin);
+          print(ids);
         });
       });
       if (pin == password.text) {
         await sharedpref.savedata('username', name);
         await sharedpref.savedata('pindata', pin);
+        await sharedpref.savedata('id', ids);
         await sharedpref.savedata('contactnumber', number.text);
         await sharedpref.savedata('login', 'true');
         setState(() {
@@ -288,6 +293,7 @@ class _LoginPageState extends State<LoginPage> {
         });
         Navigator.pushReplacementNamed(context, '/homepage');
       } else if (pin != password.text) {
+        print('reached pass');
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           behavior: SnackBarBehavior.floating,
