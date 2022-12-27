@@ -1,9 +1,11 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:otp_pin_field/otp_pin_field.dart';
+import 'package:pay_anywhere/keyexchg.dart';
 import 'package:pay_anywhere/sharedprefs.dart';
+import 'package:telephony/telephony.dart';
+import './keyexcg.dart';
 
 class MyPin extends StatefulWidget {
   const MyPin({super.key});
@@ -14,10 +16,13 @@ class MyPin extends StatefulWidget {
 
 class _MyPinState extends State<MyPin> {
   late String pin;
+  late int prvt;
+  bool load = false;
   late String userpin;
   var recpt = '9865762048'; // server number
   Future<bool> gettingpindata() async {
     userpin = await sharedpref.getdata('pindata');
+
     return true;
   }
 
@@ -113,14 +118,24 @@ class _MyPinState extends State<MyPin> {
                   height: MediaQuery.of(context).size.height * 0.06,
                   margin: EdgeInsets.only(top: 50),
                   child: ElevatedButton(
-                    onPressed: () => sms(),
-                    child: Text(
-                      'DONE',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20),
-                    ),
+                    onPressed: () async {
+                      prvt = 3;
+
+                      await sharedpref.savenumdata('prvt', prvt); //p=919 q=19
+                      String key = await deffie.enc(17, 4, prvt).toString();
+                      String publickey = await deffie.chg(key);
+                      excgkey(publickey);
+                      //sms();
+                    },
+                    child: load
+                        ? CircularProgressIndicator()
+                        : Text(
+                            'DONE',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20),
+                          ),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                         enableFeedback: false,
@@ -133,5 +148,30 @@ class _MyPinState extends State<MyPin> {
             );
           }),
     );
+  }
+
+  void excgkey(String publickey) async {
+    if (pin == userpin) {
+      // setState(() {
+      //   load = true;
+      // });
+      String message = 'public:$publickey';
+      List<String> recipents = [recpt];
+      String _result = await sendSMS(
+              message: message, recipients: recipents, sendDirect: true)
+          .catchError((onError) {
+        print(onError);
+      });
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => keyss()));
+    } else {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Enter valid PIN')));
+    }
+  }
+
+  void hello(SmsMessage message) {
+    print('here');
   }
 }
