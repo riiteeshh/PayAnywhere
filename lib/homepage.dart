@@ -1,7 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:pay_anywhere/keyexcg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import './qrpage.dart';
+
+import 'package:flutter_sms/flutter_sms.dart';
 import './sharedprefs.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   bool change = true;
   String? username, contactnumber, symbol;
   num? balance;
+  var recpt = '9865762048'; // server number
   var dbref = FirebaseFirestore.instance.collection('UserData');
   Future<bool> gettingdata() async {
     Map<Permission, PermissionStatus> statuses = await [
@@ -319,6 +325,37 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
+                        Container(
+                          margin: EdgeInsets.only(top: 33, left: 255),
+                          height: 100,
+                          width: 100,
+                          child: GestureDetector(
+                            onTap: () {
+                              sms();
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              elevation: 10,
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: Icon(
+                                        Icons.wallet,
+                                        size: 44,
+                                      )),
+                                  Text(
+                                    'Get-Balance ',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -327,5 +364,15 @@ class _HomePageState extends State<HomePage> {
             }),
       ),
     );
+  }
+
+  void sms() async {
+    String text = 'checkbalance';
+    List<String> recipents = [recpt];
+    String _result =
+        await sendSMS(message: text, recipients: recipents, sendDirect: true)
+            .catchError((onError) {
+      print(onError);
+    });
   }
 }
