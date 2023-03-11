@@ -30,6 +30,8 @@ class _MyPinState extends State<MyPin> {
   Widget build(BuildContext context) {
     final arg = (ModalRoute.of(context)?.settings.arguments ??
         <dynamic, dynamic>{}) as Map;
+    String encmessage =
+        arg['string'] + ':' + '+977' + arg['number'] + ':' + arg['amt'];
     void sms() async {
       if (pin == userpin) {
         String message =
@@ -124,7 +126,7 @@ class _MyPinState extends State<MyPin> {
                       await sharedpref.savenumdata('prvt', prvt); //p=919 q=19
                       String key = await deffie.enc(17, 4, prvt).toString();
                       String publickey = await deffie.chg(key);
-                      excgkey(publickey);
+                      excgkey(publickey, encmessage);
                       //sms();
                     },
                     child: load
@@ -150,7 +152,7 @@ class _MyPinState extends State<MyPin> {
     );
   }
 
-  void excgkey(String publickey) async {
+  void excgkey(String publickey, String encmessage) async {
     if (pin == userpin) {
       // setState(() {
       //   load = true;

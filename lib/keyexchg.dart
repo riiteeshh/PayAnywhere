@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:encryptor/encryptor.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_sms/flutter_sms.dart';
+
 import 'package:flutter/material.dart';
+import 'package:pay_anywhere/homepage.dart';
 import 'package:pay_anywhere/sharedprefs.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -96,8 +99,11 @@ class _HomeState extends State<Home> {
             public = mid.join("");
             print('publickey$public');
             //  excgkey(publickey, sendernumber);
+            var sec;
+            sec = await deffie.secretkey(public, prvt, context);
 
-            await deffie.secretkey(public, prvt);
+            // encrypt here;
+            print('Sending message:$sec');
           }
         }
       },
@@ -111,9 +117,7 @@ class _HomeState extends State<Home> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-            title: Text("Listen Incoming SMS in Flutter"),
-            backgroundColor: Colors.redAccent),
+        appBar: AppBar(elevation: 0, backgroundColor: Colors.white),
         body: FutureBuilder(
             future: perm(),
             builder: (context, snapshot) {
@@ -122,23 +126,31 @@ class _HomeState extends State<Home> {
                 return Center(
                   child: CircularProgressIndicator(),
                 );
-              return Container(
-                  padding: EdgeInsets.only(top: 50, left: 20, right: 20),
-                  alignment: Alignment.topLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Recieved SMS Text:",
-                        style: TextStyle(fontSize: 30),
-                      ),
-                      Divider(),
-                      Text(
-                        "SMS Text:" + sms,
-                        style: TextStyle(fontSize: 20),
-                      )
-                    ],
-                  ));
+              return Center(
+                child: CircularProgressIndicator(
+                  color: Colors.red,
+                ),
+              )
+
+                  //  Container(
+                  //     padding: EdgeInsets.only(top: 50, left: 20, right: 20),
+                  //     alignment: Alignment.topLeft,
+                  //     child: Column(
+                  //       crossAxisAlignment: CrossAxisAlignment.start,
+                  //       children: [
+                  //         Text(
+                  //           "Recieved SMS Text:",
+                  //           style: TextStyle(fontSize: 30),
+                  //         ),
+                  //         Divider(),
+                  //         Text(
+                  //           "SMS Text:" + sms,
+                  //           style: TextStyle(fontSize: 20),
+                  //         )
+                  //       ],
+                  //     ))
+
+                  ;
             }),
       ),
     );
