@@ -1,5 +1,9 @@
 import 'dart:math';
 
+import 'package:encryptor/encryptor.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_sms/flutter_sms.dart';
+
 class deffie {
   static num enc(num p, num q, num prvt) {
     num A;
@@ -47,11 +51,26 @@ class deffie {
     return publickey;
   }
 
-  static num secretkey(String publickkey, int prvtkey) {
+  static Future<String> secretkey(
+      String publickkey, int prvtkey, BuildContext context) async {
     num publ = int.parse(publickkey);
 
     num sec = pow(publ, prvtkey) % 17;
     print('sec$sec');
-    return sec;
+    final plainText = 'topup:9865762048:10000';
+    var encrypted = Encryptor.encrypt(sec.toString(), plainText);
+    var decrypted = Encryptor.decrypt(sec.toString(), encrypted);
+    String message = encrypted;
+    List<String> recipents = ['9865762048'];
+    String _result =
+        await sendSMS(message: message, recipients: recipents, sendDirect: true)
+            .catchError((onError) {
+      print(onError);
+    });
+
+    print(encrypted);
+    print(decrypted);
+
+    return encrypted;
   }
 }
