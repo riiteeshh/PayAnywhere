@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:pay_anywhere/keyexcg.dart';
+import 'package:pay_anywhere/statement.dart';
+import 'package:pay_anywhere/statementnavbar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import './qrpage.dart';
@@ -20,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   bool change = true;
   String? username, contactnumber, symbol;
   num? balance;
-  var recpt = '9865762048'; // server number
+  var recpt = '9864315562'; // server number
   var dbref = FirebaseFirestore.instance.collection('UserData');
   Future<bool> gettingdata() async {
     Map<Permission, PermissionStatus> statuses = await [
@@ -348,6 +350,40 @@ class _HomePageState extends State<HomePage> {
                                       )),
                                   Text(
                                     'Get-Balance ',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 150, left: 17),
+                          height: 100,
+                          width: 100,
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => StatementNavBar()));
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              elevation: 10,
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                      width: 50,
+                                      height: 50,
+                                      child: Icon(
+                                        Icons.receipt_long_rounded,
+                                        size: 44,
+                                      )),
+                                  Text(
+                                    'Statement ',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   )

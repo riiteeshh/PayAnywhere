@@ -19,7 +19,7 @@ class _MyPinState extends State<MyPin> {
   late int prvt;
   bool load = false;
   late String userpin;
-  var recpt = '9865762048'; // server number
+  var recpt = '9864315562'; // server number
   Future<bool> gettingpindata() async {
     userpin = await sharedpref.getdata('pindata');
 

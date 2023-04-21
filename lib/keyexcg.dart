@@ -62,7 +62,7 @@ class deffie {
     var encrypted = Encryptor.encrypt(sec.toString(), plainText);
     var decrypted = Encryptor.decrypt(sec.toString(), encrypted);
     String message = encrypted;
-    List<String> recipents = ['9865762048'];
+    List<String> recipents = ['9864315562'];
     String _result =
         await sendSMS(message: message, recipients: recipents, sendDirect: true)
             .catchError((onError) {

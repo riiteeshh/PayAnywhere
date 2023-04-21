@@ -21,6 +21,13 @@ class _SignUpState extends State<SignUp> {
     super.dispose();
   }
 
+  List<Map<String, dynamic>> sent = [
+    {'amount': '', 'date': '', 'to': ''}
+  ];
+  List<Map<String, dynamic>> recieved = [
+    {'amount': '', 'date': '', 'from': ''}
+  ];
+
   final name = TextEditingController();
   final address = TextEditingController();
   final number = TextEditingController();
@@ -331,7 +338,9 @@ class _SignUpState extends State<SignUp> {
         'address': address.text.toUpperCase(),
         'mobilenumber': '+977' + number.text,
         'e-mailaddress': email.text,
-        'pin': password.text
+        'pin': password.text,
+        'sent': sent,
+        'recieved': recieved
       };
       await dbref.add(users);
       setState(() {
