@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:encryptor/encryptor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
+import 'package:pay_anywhere/sharedprefs.dart';
 
 class deffie {
   static num enc(num p, num q, num prvt) {
@@ -57,7 +58,7 @@ class deffie {
 
     num sec = pow(publ, prvtkey) % 17;
     print('sec$sec');
-    final plainText = 'topup:9865762048:10000';
+    final plainText = await sharedpref.getdata('sendingdata');
     var encrypted = Encryptor.encrypt(sec.toString(), plainText);
     var decrypted = Encryptor.decrypt(sec.toString(), encrypted);
     String message = encrypted;

@@ -157,6 +157,10 @@ class _MyPinState extends State<MyPin> {
       // setState(() {
       //   load = true;
       // });
+      print('message: $encmessage');
+      await sharedpref.savedata('sendingdata', encmessage);
+      var check = await sharedpref.getdata('sendingdata');
+      print('checkingdata:$check');
       String message = 'public:$publickey';
       List<String> recipents = [recpt];
       String _result = await sendSMS(
