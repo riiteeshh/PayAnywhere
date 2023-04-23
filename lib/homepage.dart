@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePage> {
   bool change = true;
   String? username, contactnumber, symbol;
   num? balance;
-  var recpt = '9864315562'; // server number
+  var recpt = '9860916869'; // server number
   var dbref = FirebaseFirestore.instance.collection('UserData');
   Future<bool> gettingdata() async {
     Map<Permission, PermissionStatus> statuses = await [

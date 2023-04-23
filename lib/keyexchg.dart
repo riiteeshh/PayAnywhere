@@ -66,7 +66,7 @@ class _HomeState extends State<Home> {
         var x = sms;
 
         var y = x.split(
-            ":"); // var y = x.split(":"); // o/p:[topup, +9779864315562, 50]
+            ":"); // var y = x.split(":"); // o/p:[topup, +9779860916869, 50]
         if (y.length == 2) {
           if (y[0] == 'public') {
             String public;

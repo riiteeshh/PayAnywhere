@@ -339,8 +339,8 @@ class _SignUpState extends State<SignUp> {
         'mobilenumber': '+977' + number.text,
         'e-mailaddress': email.text,
         'pin': password.text,
-        'sent': null,
-        'recieved': null
+        'sent': [],
+        'recieved': []
       };
       await dbref.add(users);
       setState(() {
