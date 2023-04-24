@@ -1,15 +1,12 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
-import 'package:pay_anywhere/keyexcg.dart';
-import 'package:pay_anywhere/statement.dart';
-import 'package:pay_anywhere/statementnavbar.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import './qrpage.dart';
-
+import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
-import './sharedprefs.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import 'bar_chart.dart';
+import 'qrpage.dart';
+import 'sharedprefs.dart';
+import 'statementnavbar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -24,6 +21,9 @@ class _HomePageState extends State<HomePage> {
   num? balance;
   var recpt = '9860916869'; // server number
   var dbref = FirebaseFirestore.instance.collection('UserData');
+  var received = [];
+  var sent = [];
+
   Future<bool> gettingdata() async {
     Map<Permission, PermissionStatus> statuses = await [
       Permission.sms,
@@ -46,6 +46,9 @@ class _HomePageState extends State<HomePage> {
         print('reach');
         balance = data['balance'];
         print(balance);
+        received = data['recieved'];
+        print('recieved = $received');
+        sent = data['sent'];
       }
     });
     setState(() {
@@ -111,293 +114,339 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-        body: FutureBuilder(
-            future: gettingdata(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting &&
-                  !snapshot.hasData)
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              return Column(
-                children: <Widget>[
-                  Container(
-                    margin: EdgeInsets.only(top: 30),
-                    width: double.infinity,
-                    height: 200,
-                    child: Card(
-                      color: Colors.red.withOpacity(0.9),
-                      elevation: 20,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+        body: SingleChildScrollView(
+          child: FutureBuilder(
+              future: gettingdata(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting &&
+                    !snapshot.hasData)
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                return Column(
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(top: 30),
+                      width: double.infinity,
+                      height: 200,
+                      child: Card(
+                        color: Colors.red.withOpacity(0.9),
+                        elevation: 20,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.all(20),
+                              child: Text(
+                                'Hello,',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 17,
+                                    fontStyle: FontStyle.italic),
+                              ),
+                            ),
+                            Container(
+                              width: double.infinity,
+                              alignment: Alignment.topRight,
+                              child: IconButton(
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, '/yourqr',
+                                        arguments: {
+                                          'number': contactnumber,
+                                          'name': username,
+                                        });
+                                  },
+                                  icon: Icon(
+                                    Icons.qr_code_outlined,
+                                    color: Colors.white,
+                                    size: 30,
+                                  )),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: 45, bottom: 20, left: 20, right: 20),
+                              child: Text(
+                                username!.toUpperCase(),
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'FuzzybubblesBold',
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 19),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: 82, bottom: 20, left: 20, right: 20),
+                              child: change
+                                  ? Text(
+                                      'XXXXX',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 19),
+                                    )
+                                  : Text(
+                                      '$symbol',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 19),
+                                    ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: 125, bottom: 20, left: 20, right: 20),
+                              child: Text(
+                                'NPR.',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: 112, bottom: 20, left: 80, right: 20),
+                              child: Row(
+                                children: [
+                                  change
+                                      ? Text(
+                                          'XXXX.xx',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 22),
+                                        )
+                                      : Text(
+                                          '$balance',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 22),
+                                        ),
+                                  IconButton(
+                                    onPressed: () {
+                                      show();
+                                    },
+                                    // {
+                                    //   setState(() {
+                                    //     change = !change;
+                                    //   });
+                                    // }
+
+                                    icon: change
+                                        ? Icon(
+                                            Icons.remove_red_eye,
+                                            color: Colors.white,
+                                          )
+                                        : Icon(
+                                            Icons.visibility_off,
+                                            color: Colors.white,
+                                          ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height * 0.3,
+                      color: Colors.white,
+                      margin: EdgeInsets.all(10),
                       child: Stack(
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.all(20),
-                            child: Text(
-                              'Hello,',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 17,
-                                  fontStyle: FontStyle.italic),
-                            ),
-                          ),
-                          Container(
+                            padding: EdgeInsets.only(left: 10, top: 5),
                             width: double.infinity,
-                            alignment: Alignment.topRight,
-                            child: IconButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/yourqr',
-                                      arguments: {
-                                        'number': contactnumber,
-                                        'name': username,
-                                      });
-                                },
-                                icon: Icon(
-                                  Icons.qr_code_outlined,
-                                  color: Colors.white,
-                                  size: 30,
-                                )),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: 45, bottom: 20, left: 20, right: 20),
                             child: Text(
-                              username!.toUpperCase(),
+                              ' Services',
                               style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily: 'FuzzybubblesBold',
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 19),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: 82, bottom: 20, left: 20, right: 20),
-                            child: change
-                                ? Text(
-                                    'XXXXX',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 19),
-                                  )
-                                : Text(
-                                    '$symbol',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 19),
-                                  ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: 125, bottom: 20, left: 20, right: 20),
-                            child: Text(
-                              'NPR.',
-                              style: TextStyle(
-                                  color: Colors.white,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 22),
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontFamily: 'FuzzybubblesBold'),
                             ),
                           ),
                           Container(
-                            margin: EdgeInsets.only(
-                                top: 112, bottom: 20, left: 80, right: 20),
-                            child: Row(
-                              children: [
-                                change
-                                    ? Text(
-                                        'XXXX.xx',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 22),
-                                      )
-                                    : Text(
-                                        '$balance',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 22),
-                                      ),
-                                IconButton(
-                                  onPressed: () {
-                                    show();
-                                  },
-                                  // {
-                                  //   setState(() {
-                                  //     change = !change;
-                                  //   });
-                                  // }
-
-                                  icon: change
-                                      ? Icon(
-                                          Icons.remove_red_eye,
-                                          color: Colors.white,
-                                        )
-                                      : Icon(
-                                          Icons.visibility_off,
-                                          color: Colors.white,
-                                        ),
+                            margin: EdgeInsets.only(top: 33, left: 15),
+                            height: 100,
+                            width: 100,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, '/transactionpage');
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                elevation: 10,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                        width: 50,
+                                        height: 50,
+                                        child: Image.asset(
+                                            'asset/images/sendmoney.png')),
+                                    Text(
+                                      'Send Money',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
                                 ),
-                              ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 33, left: 135),
+                            height: 100,
+                            width: 100,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(context, '/topuppage');
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                elevation: 10,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                        width: 50,
+                                        height: 50,
+                                        child: Image.asset(
+                                            'asset/images/topup.png')),
+                                    Text(
+                                      'Top-Up ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 33, left: 255),
+                            height: 100,
+                            width: 100,
+                            child: GestureDetector(
+                              onTap: () {
+                                sms();
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                elevation: 10,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                        width: 50,
+                                        height: 50,
+                                        child: Icon(
+                                          Icons.wallet,
+                                          size: 44,
+                                        )),
+                                    Text(
+                                      'Get-Balance ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 150, left: 17),
+                            height: 100,
+                            width: 100,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            StatementNavBar()));
+                              },
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)),
+                                elevation: 10,
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                        width: 50,
+                                        height: 50,
+                                        child: Icon(
+                                          Icons.receipt_long_rounded,
+                                          size: 44,
+                                        )),
+                                    Text(
+                                      'Statement ',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  Container(
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    color: Colors.white,
-                    margin: EdgeInsets.all(10),
-                    child: Stack(
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.only(left: 10, top: 5),
-                          width: double.infinity,
-                          child: Text(
-                            ' Services',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontFamily: 'FuzzybubblesBold'),
-                          ),
+                    Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.green,
+                            )
+                          ],
                         ),
-                        Container(
-                          margin: EdgeInsets.only(top: 33, left: 15),
-                          height: 100,
-                          width: 100,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/transactionpage');
-                            },
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              elevation: 10,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: Image.asset(
-                                          'asset/images/sendmoney.png')),
-                                  Text(
-                                    'Send Money',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 33, left: 135),
-                          height: 100,
-                          width: 100,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/topuppage');
-                            },
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              elevation: 10,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: Image.asset(
-                                          'asset/images/topup.png')),
-                                  Text(
-                                    'Top-Up ',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 33, left: 255),
-                          height: 100,
-                          width: 100,
-                          child: GestureDetector(
-                            onTap: () {
-                              sms();
-                            },
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              elevation: 10,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: Icon(
-                                        Icons.wallet,
-                                        size: 44,
-                                      )),
-                                  Text(
-                                    'Get-Balance ',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 150, left: 17),
-                          height: 100,
-                          width: 100,
-                          child: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => StatementNavBar()));
-                            },
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              elevation: 10,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                      width: 50,
-                                      height: 50,
-                                      child: Icon(
-                                        Icons.receipt_long_rounded,
-                                        size: 44,
-                                      )),
-                                  Text(
-                                    'Statement ',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              );
-            }),
+                        padding: EdgeInsets.all(12),
+                        height: 350,
+                        // child: LineChart(
+                        //   LineChartData(
+                        //     borderData: FlBorderData(show: false),
+                        //     lineBarsData: [
+                        //       LineChartBarData(
+                        //         spots: [
+                        //           FlSpot(1, 4),
+                        //           FlSpot(2, 9),
+                        //           FlSpot(3, 5),
+                        //         ],
+                        //         isCurved: false,
+                        //         barWidth: 2.6,
+                        //         color: Colors.red,
+                        //       )
+                        //     ],
+                        //   ),
+                        // ),
+
+                        // child: BarGraph(
+                        //   incomeExpenditure: [10.1, 100000.5],
+                        // ),
+                        child: change
+                            ? SizedBox()
+                            : iVeBarChart(
+                                expenditure: sent,
+                                income: received,
+                              )),
+                    SizedBox(
+                      height: 120,
+                    )
+                  ],
+                );
+              }),
+        ),
       ),
     );
   }

@@ -1,13 +1,15 @@
 import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:pay_anywhere/homepage.dart';
-import 'package:pay_anywhere/pin.dart';
-import 'package:pay_anywhere/topupage.dart';
-import 'package:pay_anywhere/transactonpage.dart';
-import 'package:pay_anywhere/yourqr.dart';
-import './loginpage.dart';
-import './sharedprefs.dart';
+
+import 'homepage.dart';
+import 'loginpage.dart';
+import 'pin.dart';
+import 'sharedprefs.dart';
+import 'topupage.dart';
+import 'transactonpage.dart';
+import 'yourqr.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -89,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 backgroundColor: Colors.white,
                 color: Colors.red,
               ),
-            )
+            ),
           ],
         ),
       ),
