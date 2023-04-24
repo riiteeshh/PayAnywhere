@@ -29,18 +29,24 @@ class _BarChartState extends State<iVeBarChart> {
   }
 
   finalToalIncomeExpenditure() async {
-    for (int i = 0; i < widget.income.length; i++) {
-      print('the amt = ${widget.income[i]['amount']}');
+    print('demo = ${widget.expenditure}');
+    print('demo incom = ${widget.income}');
+    if (widget.income.isNotEmpty) {
+      for (int i = 0; i < widget.income.length; i++) {
+        print('the amt = ${widget.income[i]['amount']}');
 
-      setState(() {
-        totalIncome += int.parse(widget.income[i]['amount']);
-      });
+        setState(() {
+          totalIncome += int.parse(widget.income[i]['amount']);
+        });
+      }
     }
 
-    for (int i = 0; i < widget.expenditure.length; i++) {
-      setState(() {
-        totalExpenditure += int.parse(widget.expenditure[i]['amount']);
-      });
+    if (widget.expenditure.isNotEmpty) {
+      for (int i = 0; i < widget.expenditure.length; i++) {
+        setState(() {
+          totalExpenditure += int.parse(widget.expenditure[i]['amount']);
+        });
+      }
     }
     print('totalIncome = $totalIncome');
     print('totalExpenditure = $totalExpenditure');

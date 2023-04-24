@@ -46,9 +46,9 @@ class _HomePageState extends State<HomePage> {
         print('reach');
         balance = data['balance'];
         print(balance);
-        received = data['recieved'];
+        received = data['recieved'] ?? [];
         print('recieved = $received');
-        sent = data['sent'];
+        sent = data['sent'] ?? [];
       }
     });
     setState(() {
