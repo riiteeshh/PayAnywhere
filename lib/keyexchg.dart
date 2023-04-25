@@ -61,7 +61,7 @@ class _HomeState extends State<Home> {
         print(message.address);
         print(message.body);
 
-        //  var securitycode = '123478'; // security code for ntc
+        //  var securitycode = '1231978'; // security code for ntc
         //var sendernumber = message.address;
         var x = sms;
 
@@ -78,7 +78,11 @@ class _HomeState extends State<Home> {
             num midd;
             int cd;
             print('reached');
-            int prvt = await sharedpref.getnumdata('prvt');
+            int prvt =
+                //int.parse(await sharedpref.getdata('privatekey'));
+                // print('prvt:$prvt');
+                await sharedpref.getnumdata('prvt'); //for private key
+
             print('reach');
             str = y[1].split('');
             print('str$str');
@@ -186,10 +190,11 @@ class _HomeState extends State<Home> {
     return publickey;
   }
 
-  static num secretkey(String publickkey, num prvtkey) {
+  static BigInt secretkey(String publickkey, num prvtkey) {
     num publ = int.parse(publickkey);
 
-    num sec = pow(publ, prvtkey) % 17;
+    BigInt sec =
+        ((BigInt.from(publ)) ^ (BigInt.from(prvtkey))) % BigInt.from(15485863);
     print('secretkey$sec');
     return sec;
   }

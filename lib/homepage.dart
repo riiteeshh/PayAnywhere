@@ -2,8 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import 'bar_chart.dart';
 import 'qrpage.dart';
 import 'sharedprefs.dart';
 import 'statementnavbar.dart';
@@ -401,45 +399,29 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                    Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.green,
-                            )
-                          ],
-                        ),
-                        padding: EdgeInsets.all(12),
-                        height: 350,
-                        // child: LineChart(
-                        //   LineChartData(
-                        //     borderData: FlBorderData(show: false),
-                        //     lineBarsData: [
-                        //       LineChartBarData(
-                        //         spots: [
-                        //           FlSpot(1, 4),
-                        //           FlSpot(2, 9),
-                        //           FlSpot(3, 5),
-                        //         ],
-                        //         isCurved: false,
-                        //         barWidth: 2.6,
-                        //         color: Colors.red,
-                        //       )
-                        //     ],
-                        //   ),
-                        // ),
-
-                        // child: BarGraph(
-                        //   incomeExpenditure: [10.1, 100000.5],
-                        // ),
-                        child: change
-                            ? SizedBox()
-                            : iVeBarChart(
-                                expenditure: sent,
-                                income: received,
-                              )),
+                    // Container(
+                    //     decoration: BoxDecoration(
+                    //       color: Colors.white,
+                    //       borderRadius: BorderRadius.circular(8),
+                    //       boxShadow: [
+                    //         BoxShadow(
+                    //           color: Colors.green,
+                    //         )
+                    //       ],
+                    //     ),
+                    //     padding: EdgeInsets.all(12),
+                    //     height: 350,
+                    //
+                    //
+                    //     // child: BarGraph(
+                    //     //   incomeExpenditure: [10.1, 100000.5],
+                    //     // ),
+                    //     child: change
+                    //         ? SizedBox()
+                    //         : iVeBarChart(
+                    //             expenditure: sent,
+                    //             income: received,
+                    //           )),
                     SizedBox(
                       height: 120,
                     )
@@ -452,7 +434,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void sms() async {
-    String text = 'checkbalance';
+    String text = 'getbalance';
     List<String> recipents = [recpt];
     String _result =
         await sendSMS(message: text, recipients: recipents, sendDirect: true)

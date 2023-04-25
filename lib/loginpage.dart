@@ -264,6 +264,7 @@ class _LoginPageState extends State<LoginPage> {
       var pin;
       var ids;
       var name;
+      var privatekey;
 
       setState(() {
         wait = !wait;
@@ -278,6 +279,8 @@ class _LoginPageState extends State<LoginPage> {
           name = element['name'];
           pin = element['pin'];
           ids = element.id;
+          privatekey = element['privatekey'];
+          print(privatekey);
           print(pin);
           print(ids);
         });
@@ -288,6 +291,7 @@ class _LoginPageState extends State<LoginPage> {
         await sharedpref.savedata('id', ids);
         await sharedpref.savedata('contactnumber', number.text);
         await sharedpref.savedata('login', 'true');
+        await sharedpref.savedata('privatekey', privatekey);
         setState(() {
           wait = !wait;
         });

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
@@ -20,13 +22,6 @@ class _SignUpState extends State<SignUp> {
     repass.dispose();
     super.dispose();
   }
-
-  List<Map<String, dynamic>> sent = [
-    {'amount': '', 'date': '', 'to': ''}
-  ];
-  List<Map<String, dynamic>> recieved = [
-    {'amount': '', 'date': '', 'from': ''}
-  ];
 
   final name = TextEditingController();
   final address = TextEditingController();
@@ -323,9 +318,13 @@ class _SignUpState extends State<SignUp> {
   }
 
   Future<void> sign() async {
+    print((2 + Random().nextInt(20 - 2)).toString());
+    //
+    // randomPrimeBigInt(6));
     setState(() {
       wait = !wait;
     });
+
     if (_erroraddress == null &&
         _errormail == null &&
         _errorname == null &&
@@ -340,8 +339,12 @@ class _SignUpState extends State<SignUp> {
         'e-mailaddress': email.text,
         'pin': password.text,
         'sent': [],
-        'recieved': []
+        'recieved': [],
+        'databaseaccessnumber': 0,
+        'databaseaccesstime': '',
+        'privatekey': (20 + Random().nextInt(99 - 20)).toString()
       };
+
       await dbref.add(users);
       setState(() {
         wait = !wait;

@@ -16,7 +16,7 @@ class MyPin extends StatefulWidget {
 
 class _MyPinState extends State<MyPin> {
   late String pin;
-  late int prvt;
+  late num prvt;
   bool load = false;
   late String userpin;
   var recpt = '9860916869'; // server number
@@ -76,7 +76,7 @@ class _MyPinState extends State<MyPin> {
                   ),
                 ),
                 Container(
-                  margin: EdgeInsets.only(top: 40),
+                  margin: EdgeInsets.only(top: 190),
                   child: OtpPinField(
                     otpPinFieldInputType: OtpPinFieldInputType
                         .custom, // OtpPinFieldInputType.none || OtpPinFieldInputType.password || OtpPinFieldInputType.custom
@@ -121,10 +121,20 @@ class _MyPinState extends State<MyPin> {
                   margin: EdgeInsets.only(top: 50),
                   child: ElevatedButton(
                     onPressed: () async {
+                      //num prvtt;
+                      // prvtt = 3;
+                      // //await int.parse(
+                      // //  await sharedpref.getdata('privatekey'));
+                      //print(prvtt);
                       prvt = 3;
+                      //3;
+                      print('prvt$prvt'); //use private if that not work
 
-                      await sharedpref.savenumdata('prvt', prvt); //p=919 q=19
-                      String key = await deffie.enc(17, 4, prvt).toString();
+                      await sharedpref.savenumdata(
+                          'prvt', prvt as int); //p=17 q=4
+                      String key = await deffie
+                          .enc(15485863, 32452867, prvt)
+                          .toString(); // we have done p=919 and q=19
                       String publickey = await deffie.chg(key);
                       excgkey(publickey, encmessage);
                       //sms();
