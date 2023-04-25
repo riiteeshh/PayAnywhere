@@ -126,7 +126,8 @@ class _MyPinState extends State<MyPin> {
                       // //await int.parse(
                       // //  await sharedpref.getdata('privatekey'));
                       //print(prvtt);
-                      prvt = 3;
+                      prvt =
+                          10003; //we used 3 //then used103//then we used 10003
                       //3;
                       print('prvt$prvt'); //use private if that not work
 
