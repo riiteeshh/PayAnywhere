@@ -1,6 +1,7 @@
+import 'dart:ffi';
 import 'dart:typed_data';
 
-class Aesenc {
+class Encrypter {
   static final Uint8List s_box = Uint8List.fromList([
     0x63,
     0x7c,
@@ -1034,7 +1035,7 @@ class Aesenc {
     0x8d
   ]);
 
-  enc(String data, String keydata) {
+  String encrypt(String data, String keydata) {
     int originallen = data.length;
     int lenOfPaddedMessage = originallen;
     List message = data.split("");
@@ -1059,6 +1060,7 @@ class Aesenc {
       print("");
     }
     //delete[] paddedMessage;
+    return data;
   }
 
   void AES_Encrypt(List message, List key) {
@@ -1099,6 +1101,55 @@ class Aesenc {
             expandedKeys[bytesGenerated - 16] ^ temp[a];
         bytesGenerated++;
       }
+    }
+    List state;
+    Subytes(List);
+    Shiftrows(List);
+    Addroundkey(List, expandedKey + 160);
+    //copy over the encrypted messsage
+    for (int i = 0; i < 16; i++) {
+      List state = [];
+      var message = state;
+    }
+  }
+
+  void Subytes(state) //
+  {
+    for (int i = 0; i < 16; i++) {
+      state[i] = s_box[state[i]];
+    }
+  }
+
+  void Shiftrows(state) {
+    List tmp = [];
+    tmp[0] = state[0];
+    tmp[1] = state[5];
+    tmp[2] = state[10];
+    tmp[3] = state[15];
+
+    tmp[4] = state[4];
+    tmp[5] = state[9];
+    tmp[6] = state[14];
+    tmp[7] = state[3];
+
+    tmp[8] = state[8];
+    tmp[9] = state[13];
+    tmp[10] = state[2];
+    tmp[11] = state[7];
+
+    tmp[12] = state[12];
+    tmp[13] = state[1];
+    tmp[14] = state[6];
+    tmp[15] = state[11];
+
+    for (int i = 0; i < 16; i++) {
+      state[i] = tmp[i];
+    }
+  }
+
+  void Addroundkey(state, List roundkey) {
+    for (int i = 0; i < 16; i++) {
+      state[i] ^= roundkey[i];
     }
   }
 
